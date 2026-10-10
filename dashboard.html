@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Battery Overview - NEXORA</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-body">
+
+  <div class="dashboard-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="assets/logo.svg" alt="NEXORA Logo" class="sidebar-logo-img" />
+        <div class="sidebar-brand-text">
+          <div class="brand-title-sm">NEXORA</div>
+          <div class="brand-subtitle-sm">AI Battery Intelligence</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Overview
+        </a>
+        <a href="health-rul.html" class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+          Health & RUL
+        </a>
+        <a href="anomaly.html" class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Anomaly & Validation
+        </a>
+        <a href="admin.html" class="nav-item" id="adminNavItem">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Admin Control
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="nav-item logout-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-filters">
+          <select class="filter-select" id="batterySelect">
+            <option value="NX-18650-001">NX-18650-001</option>
+            <option value="NX-18650-002">NX-18650-002</option>
+          </select>
+          <select class="filter-select" id="yearSelect">
+            <option value="2026">2026</option>
+            <option value="2025">2025</option>
+          </select>
+          <select class="filter-select" id="monthSelect">
+            <option value="10">October</option>
+            <option value="09">September</option>
+          </select>
+          <input type="date" class="filter-select" id="dateSelect" value="2026-10-10" />
+          <select class="filter-select" id="cycleSelect">
+            <option value="0-500">Cycles 0-500</option>
+            <option value="500-1000">Cycles 500-1000</option>
+          </select>
+          <button class="btn-secondary" id="exportBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export
+          </button>
+        </div>
+        
+        <div class="header-user">
+          <div class="notifications-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          </div>
+          <div class="user-profile" id="userProfileMenu">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-info">
+              <div class="user-name" id="userNameDisplay">User Name</div>
+              <div class="user-role" id="userRoleDisplay">Role</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Body -->
+      <div class="dashboard-scrollable">
+        <h1 class="page-title">Battery Overview</h1>
+        
+        <!-- Battery Identity Strip -->
+        <div class="identity-strip">
+          <div class="id-item">
+            <span class="id-label">Battery ID</span>
+            <span class="id-value">NX-18650-001</span>
+          </div>
+          <div class="id-item">
+            <span class="id-label">Cell</span>
+            <span class="id-value">INR18650-20R</span>
+          </div>
+          <div class="id-item">
+            <span class="id-label">Chemistry</span>
+            <span class="id-value">NMC / Graphite</span>
+          </div>
+          <div class="id-item">
+            <span class="id-label">Application</span>
+            <span class="id-value">EV Traction</span>
+          </div>
+          <div class="id-item">
+            <span class="id-label">Current Cycle</span>
+            <span class="id-value">426</span>
+          </div>
+          <div class="id-item">
+            <span class="id-label">EOL Criterion</span>
+            <span class="id-value">80% SOH</span>
+          </div>
+        </div>
+
+        <!-- Primary KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-title">Battery Health Index / SOH</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">86.4<span class="kpi-unit">%</span></span>
+              <span class="status-badge status-healthy">Healthy</span>
+            </div>
+            <div class="kpi-trend trend-down">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+              -0.2% from last cycle
+            </div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-title">Remaining Useful Life / RUL</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">174<span class="kpi-unit"> cycles</span></span>
+            </div>
+            <div class="kpi-trend trend-down">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+              -1 cycle
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-title">Remaining Capacity</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">1.73<span class="kpi-unit"> Ah</span></span>
+            </div>
+            <div class="kpi-trend trend-down">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+              -0.01 Ah
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-title">Temperature</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">31.6<span class="kpi-unit"> °C</span></span>
+              <span class="status-badge status-normal">Normal</span>
+            </div>
+            <div class="kpi-trend trend-up">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+              +0.4 °C
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-title">Battery Status</div>
+            <div class="kpi-value-row">
+              <span class="kpi-value">NORMAL</span>
+            </div>
+            <div class="kpi-trend text-muted">
+              No critical anomaly detected
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Chart and Layout Grid -->
+        <div class="dashboard-grid">
+          
+          <!-- Main Chart -->
+          <div class="chart-section card-box">
+            <div class="card-header">
+              <h3 class="card-title">Battery Health & Degradation</h3>
+              <div class="chart-actions">
+                <select class="filter-select" id="overviewChartTypeSelect">
+                  <option value="line" selected>Line Chart</option>
+                  <option value="bar">Bar Chart</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="healthDegradationChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Side Panel -->
+          <div class="side-panel">
+            
+            <!-- AI Health Insight -->
+            <div class="insight-card card-box">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary-blue)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  AI Health Insight
+                </h3>
+              </div>
+              <div class="insight-content">
+                <p>"Recent capacity degradation and impedance growth are contributing to the estimated battery health decline."</p>
+              </div>
+            </div>
+
+            <!-- Recent Events -->
+            <div class="events-card card-box">
+              <div class="card-header">
+                <h3 class="card-title">Recent Events</h3>
+              </div>
+              <div class="events-list">
+                <div class="event-item">
+                  <div class="event-time">Cycle 425</div>
+                  <div class="event-details">
+                    <div class="event-type">Temp Spike Warning</div>
+                    <div class="event-status status-watch">Watch</div>
+                  </div>
+                </div>
+                <div class="event-item">
+                  <div class="event-time">Cycle 410</div>
+                  <div class="event-details">
+                    <div class="event-type">Impedance Shift</div>
+                    <div class="event-status status-normal">Resolved</div>
+                  </div>
+                </div>
+                <div class="event-item">
+                  <div class="event-time">Cycle 395</div>
+                  <div class="event-details">
+                    <div class="event-type">Routine Calibration</div>
+                    <div class="event-status status-normal">Info</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Parameter Monitoring -->
+        <h3 class="section-title">Parameter Monitoring</h3>
+        <div class="parameters-grid">
+          
+          <!-- Electrical -->
+          <div class="parameter-category card-box">
+            <h4 class="category-title">Electrical</h4>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Voltage</div>
+                <div class="param-val">4.12 <span class="param-unit">V</span></div>
+              </div>
+              <div class="param-status status-normal">Normal</div>
+            </div>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Current</div>
+                <div class="param-val">2.50 <span class="param-unit">A</span></div>
+              </div>
+              <div class="param-status status-normal">Normal</div>
+            </div>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Impedance</div>
+                <div class="param-val">32.4 <span class="param-unit">mΩ</span></div>
+              </div>
+              <div class="param-status status-watch">Watch</div>
+            </div>
+          </div>
+
+          <!-- Thermal -->
+          <div class="parameter-category card-box">
+            <h4 class="category-title">Thermal</h4>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Temperature</div>
+                <div class="param-val">31.6 <span class="param-unit">°C</span></div>
+              </div>
+              <div class="param-status status-normal">Normal</div>
+            </div>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Temp Rise Rate</div>
+                <div class="param-val">0.2 <span class="param-unit">°C/min</span></div>
+              </div>
+              <div class="param-status status-normal">Normal</div>
+            </div>
+          </div>
+
+          <!-- Degradation -->
+          <div class="parameter-category card-box">
+            <h4 class="category-title">Degradation</h4>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Capacity</div>
+                <div class="param-val">1.73 <span class="param-unit">Ah</span></div>
+              </div>
+              <div class="param-status status-normal">Normal</div>
+            </div>
+            <div class="param-row">
+              <div class="param-info">
+                <div class="param-name">Capacity Fade</div>
+                <div class="param-val">13.6 <span class="param-unit">%</span></div>
+              </div>
+              <div class="param-status status-normal">Normal</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

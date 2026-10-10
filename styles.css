@@ -1,0 +1,444 @@
+/* ==========================================================================
+   NEXORA AI Battery Intelligence Platform
+   Core Enterprise Stylesheet - Page 1 Login & App Architecture
+   ========================================================================== */
+
+:root {
+  /* Color Palette - Enterprise Light Theme */
+  --bg-overlay: rgba(238, 244, 250, 0.42);
+  --card-bg: rgba(255, 255, 255, 0.93);
+  --card-border: rgba(219, 230, 242, 0.85);
+  --card-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  
+  --text-main: #0f172a;       /* Deep Navy */
+  --text-muted: #475569;      /* Slate Grey */
+  --text-light: #64748b;      /* Light Slate */
+  
+  --primary-blue: #0284c7;    /* Primary Brand Blue */
+  --primary-hover: #0369a1;   /* Hover State */
+  --primary-active: #075985;  /* Pressed State */
+  --primary-glow: rgba(2, 132, 199, 0.22);
+
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;  /* System Online Indicator */
+  --accent-danger: #ef4444;
+
+  --input-bg: #f8fafc;
+  --input-border: #cbd5e1;
+  --input-focus-border: #0284c7;
+
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+}
+
+/* Global Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family);
+  color: var(--text-main);
+  background-color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Page Background Container */
+.login-page-wrapper {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  
+  /* Background Image (Supplied NEXORA background) */
+  background-image: url('../assets/nexora-background.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Light Overlay to keep background subtle & login form readable */
+.login-page-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(240, 246, 252, 0.35) 0%, rgba(226, 237, 248, 0.55) 100%);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+
+/* Main Login Card */
+.login-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  padding: 2.25rem;
+  animation: cardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Brand Header Block */
+.brand-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.brand-logo-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+}
+
+.brand-logo-img {
+  width: 48px;
+  height: 48px;
+}
+
+.brand-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #0f172a;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.brand-subtitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary-blue);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.75rem;
+}
+
+/* System Status Pill */
+.system-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(240, 249, 255, 0.85);
+  border: 1px solid rgba(186, 230, 253, 0.9);
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #0369a1;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* Form Controls */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.01em;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  height: 46px;
+  padding: 0 1rem;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--text-main);
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.form-input::placeholder {
+  color: #94a3b8;
+}
+
+.form-input:hover {
+  border-color: #94a3b8;
+  background-color: #ffffff;
+}
+
+.form-input:focus {
+  border-color: var(--input-focus-border);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+/* Password Toggle Icon Button */
+.password-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.password-toggle-btn:hover {
+  color: var(--text-main);
+  background-color: rgba(226, 232, 240, 0.6);
+}
+
+/* Form Utility Row (Remember Me) */
+.form-utility-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: -0.25rem;
+}
+
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--primary-blue);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.forgot-password-link {
+  font-size: 0.82rem;
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.forgot-password-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+/* Submit Button */
+.btn-submit {
+  width: 100%;
+  height: 48px;
+  margin-top: 0.5rem;
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
+  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn-submit:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.38);
+  transform: translateY(-1px);
+}
+
+.btn-submit:active {
+  background-color: var(--primary-active);
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+}
+
+.btn-submit:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Spinner */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error Alert Banner */
+.error-banner {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md);
+  color: #991b1b;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  animation: shakeAlert 0.4s ease;
+}
+
+@keyframes shakeAlert {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+/* Demo Accounts Section */
+.demo-accounts-wrapper {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.demo-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.demo-pills {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.demo-pill-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 0.5rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.demo-pill-btn:hover {
+  background-color: #f0f9ff;
+  border-color: var(--primary-blue);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.1);
+}
+
+.demo-pill-role {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.demo-pill-user {
+  font-size: 0.72rem;
+  color: var(--text-light);
+}
+
+/* Footer Tag */
+.card-footer-tag {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #64748b;
+  letter-spacing: 0.02em;
+}
+
+/* Responsiveness */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 1.75rem 1.25rem 1.5rem 1.25rem;
+  }
+  .brand-title {
+    font-size: 1.5rem;
+  }
+  .demo-pills {
+    flex-direction: column;
+  }
+}
