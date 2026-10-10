@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="50%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="boltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#f0f9ff" stop-opacity="0.9" />
+    </linearGradient>
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Outer Hex Shield Base -->
+  <polygon points="100,18 170,58 170,142 100,182 30,142 30,58" fill="url(#bgGlow)" rx="8" />
+  
+  <!-- Inner Battery Circuit Rings -->
+  <polygon points="100,32 156,64 156,136 100,168 44,136 44,64" fill="none" stroke="#38bdf8" stroke-width="3" stroke-opacity="0.6" stroke-dasharray="8 4" />
+
+  <!-- Battery Terminal Top Cap -->
+  <rect x="85" y="42" width="30" height="8" rx="3" fill="#ffffff" />
+
+  <!-- Core Lightning Energy Bolt -->
+  <path d="M106 58 L78 106 H98 L92 144 L122 96 H102 Z" fill="#ffffff" filter="url(#subtleGlow)" />
+  
+  <!-- Pulse Circuit Nodes -->
+  <circle cx="100" cy="18" r="4" fill="#38bdf8" />
+  <circle cx="170" cy="58" r="4" fill="#38bdf8" />
+  <circle cx="170" cy="142" r="4" fill="#38bdf8" />
+  <circle cx="100" cy="182" r="4" fill="#38bdf8" />
+  <circle cx="30" cy="142" r="4" fill="#38bdf8" />
+  <circle cx="30" cy="58" r="4" fill="#38bdf8" />
+</svg>
